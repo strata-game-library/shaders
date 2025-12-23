@@ -19,7 +19,8 @@ float rand(vec2 co) {
     lighting: {
         toon: /* glsl */ `
 float toonShading(float NdotL, float levels) {
-    return floor(NdotL * levels) / levels;
+    float safeLevels = max(levels, 1.0);
+    return floor(NdotL * safeLevels) / safeLevels;
 }`,
         rim: /* glsl */ `
 float rimLight(vec3 viewDir, vec3 normal, float power, float strength) {
