@@ -1,0 +1,65 @@
+{
+  "name": "@jbcom/strata-shaders",
+  "version": "1.0.0",
+  "description": "GLSL shader collection for Strata 3D - terrain, water, clouds, volumetric effects",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint src/",
+    "lint:fix": "biome lint --write src/",
+    "format": "biome format --write src/",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "glsl",
+    "shaders",
+    "three",
+    "threejs",
+    "webgl",
+    "terrain",
+    "water",
+    "clouds",
+    "volumetric",
+    "react-three-fiber",
+    "r3f",
+    "strata"
+  ],
+  "author": "Jon Bogaty <jon@jbcom.io>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbcom/nodejs-strata-shaders.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jbcom/nodejs-strata-shaders/issues"
+  },
+  "homepage": "https://github.com/jbcom/nodejs-strata-shaders#readme",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/three": "^0.170.0",
+    "three": "^0.170.0",
+    "typescript": "^5.7.2"
+  },
+  "peerDependencies": {
+    "three": ">=0.150.0"
+  },
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": true
+    }
+  }
+}
