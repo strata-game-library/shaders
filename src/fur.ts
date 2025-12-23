@@ -91,8 +91,8 @@ export function createFurUniforms(layerOffset: number = 0) {
         layerOffset: { value: layerOffset },
         spacing: { value: 0.02 },
         time: { value: 0 },
-        colorBase: { value: [0.3, 0.2, 0.1] },
-        colorTip: { value: [0.6, 0.5, 0.3] },
+        colorBase: { value: new THREE.Color(0.3, 0.2, 0.1) },
+        colorTip: { value: new THREE.Color(0.6, 0.5, 0.3) },
     };
 }
 

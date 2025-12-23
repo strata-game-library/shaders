@@ -60,7 +60,8 @@ export const cloudLayerFragmentShader = /* glsl */ `
     float frequency = 1.0;
     float maxValue = 0.0;
     
-    for (int i = 0; i < 8; i++) {
+    #define MAX_FBM_OCTAVES 8
+    for (int i = 0; i < MAX_FBM_OCTAVES; i++) {
       if (i >= octaves) break;
       value += amplitude * noise(p * frequency);
       maxValue += amplitude;

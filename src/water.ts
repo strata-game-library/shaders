@@ -196,7 +196,7 @@ export const advancedWaterVertexShader = /* glsl */ `
     
     float noiseValue = fbm(vec2(pos.x * 0.1, pos.y * 0.1) + uTime * 0.05);
     
-    pos.z += wave1 + wave2 + wave3 + noiseValue * 0.1;
+    pos.y += wave1 + wave2 + wave3 + noiseValue * 0.1;
     
     vElevation = pos.z;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
