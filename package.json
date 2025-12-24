@@ -101,10 +101,10 @@
   },
   "homepage": "https://github.com/jbcom/nodejs-strata-shaders#readme",
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@types/three": "^0.170.0",
-    "three": "^0.170.0",
-    "typescript": "^5.7.2"
+    "@biomejs/biome": "^2.3.10",
+    "@types/three": "^0.182.0",
+    "three": "^0.182.0",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "three": ">=0.150.0"
