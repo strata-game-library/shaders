@@ -1,5 +1,5 @@
-import type * as THREE from 'three';
-import type { IUniforms } from './types';
+import * as THREE from 'three';
+import type { IUniforms } from './types.js';
 
 /**
  * Volumetric Rendering Shaders
@@ -143,8 +143,8 @@ export const volumetricFogFragmentShader = /* glsl */ `
         float rayLength = length(worldPos - uCameraPosition);
         
         // Raymarch through fog
-        const int STEPS = 32;
-        float stepSize = rayLength / float(STEPS);
+        #define MAX_STEPS 32
+        float stepSize = rayLength / float(MAX_STEPS);
         
         vec3 fogAccum = vec3(0.0);
         float transmittance = 1.0;
@@ -152,7 +152,7 @@ export const volumetricFogFragmentShader = /* glsl */ `
         
         vec3 lightDir = normalize(uLightDirection);
         
-        for (int i = 0; i < STEPS; i++) {
+        for (int i = 0; i < MAX_STEPS; i++) {
             currentPos += rayDir * stepSize;
             
             float density = getFogDensity(currentPos);
@@ -181,28 +181,30 @@ export const volumetricFogFragmentShader = /* glsl */ `
 `;
 
 export const volumetricFogShader = {
-    uniforms: {
+    vertexShader: volumetricFogVertexShader,
+    fragmentShader: volumetricFogFragmentShader,
+};
+
+export function createVolumetricFogUniforms(): VolumetricFogUniforms {
+    return {
         tDepth: { value: null },
         tDiffuse: { value: null },
         uCameraNear: { value: 0.1 },
         uCameraFar: { value: 1000.0 },
-        uFogColor: { value: [0.7, 0.8, 0.9] },
+        uFogColor: { value: new THREE.Color(0.7, 0.8, 0.9) },
         uFogDensity: { value: 0.02 },
         uFogHeight: { value: 10.0 },
         uFogFalloff: { value: 0.1 },
         uTime: { value: 0 },
-        uLightDirection: { value: [0.5, 0.8, 0.3] },
-        uLightColor: { value: [1.0, 0.95, 0.8] },
+        uLightDirection: { value: new THREE.Vector3(0.5, 0.8, 0.3) },
+        uLightColor: { value: new THREE.Color(1.0, 0.95, 0.8) },
         uScatteringStrength: { value: 0.3 },
-        uResolution: { value: [1920, 1080] },
-        uCameraPosition: { value: [0, 0, 0] },
+        uResolution: { value: new THREE.Vector2(1920, 1080) },
+        uCameraPosition: { value: new THREE.Vector3(0, 0, 0) },
         uProjectionMatrixInverse: { value: null },
         uViewMatrixInverse: { value: null },
-    },
-
-    vertexShader: volumetricFogVertexShader,
-    fragmentShader: volumetricFogFragmentShader,
-};
+    };
+}
 
 // =============================================================================
 // UNDERWATER SHADER
@@ -324,25 +326,27 @@ export const underwaterFragmentShader = /* glsl */ `
 `;
 
 export const underwaterShader = {
-    uniforms: {
+    vertexShader: underwaterVertexShader,
+    fragmentShader: underwaterFragmentShader,
+};
+
+export function createUnderwaterUniforms(): UnderwaterUniforms {
+    return {
         tDiffuse: { value: null },
         tDepth: { value: null },
         uTime: { value: 0 },
-        uWaterColor: { value: [0.0, 0.3, 0.5] },
+        uWaterColor: { value: new THREE.Color(0.0, 0.3, 0.5) },
         uWaterDensity: { value: 0.1 },
         uCausticStrength: { value: 0.3 },
         uCausticScale: { value: 2.0 },
         uWaterSurface: { value: 0.0 },
-        uCameraPosition: { value: [0, 0, 0] },
+        uCameraPosition: { value: new THREE.Vector3(0, 0, 0) },
         uCameraNear: { value: 0.1 },
         uCameraFar: { value: 1000.0 },
         uProjectionMatrixInverse: { value: null },
         uViewMatrixInverse: { value: null },
-    },
-
-    vertexShader: underwaterVertexShader,
-    fragmentShader: underwaterFragmentShader,
-};
+    };
+}
 
 // =============================================================================
 // ATMOSPHERIC SCATTERING
@@ -393,6 +397,9 @@ export const atmosphereFragmentShader = /* glsl */ `
     vec3 getWorldPosition(vec2 uv, float depth) {
         vec4 clipSpace = vec4(uv * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
         vec4 viewSpace = uProjectionMatrixInverse * clipSpace;
+        if (abs(viewSpace.w) < 0.0001) {
+            return vec3(0.0);
+        }
         viewSpace /= viewSpace.w;
         vec4 worldSpace = uViewMatrixInverse * viewSpace;
         return worldSpace.xyz;
@@ -435,25 +442,27 @@ export const atmosphereFragmentShader = /* glsl */ `
 `;
 
 export const atmosphereShader = {
-    uniforms: {
+    vertexShader: atmosphereVertexShader,
+    fragmentShader: atmosphereFragmentShader,
+};
+
+export function createAtmosphereUniforms(): AtmosphereUniforms {
+    return {
         tDiffuse: { value: null },
         tDepth: { value: null },
         uTime: { value: 0 },
-        uSunDirection: { value: [0.3, 0.7, 0.5] },
-        uSunColor: { value: [1.0, 0.9, 0.7] },
-        uSkyColor: { value: [0.4, 0.6, 0.9] },
+        uSunDirection: { value: new THREE.Vector3(0.3, 0.7, 0.5) },
+        uSunColor: { value: new THREE.Color(1.0, 0.9, 0.7) },
+        uSkyColor: { value: new THREE.Color(0.4, 0.6, 0.9) },
         uRayleighCoeff: { value: 0.0025 },
         uMieCoeff: { value: 0.001 },
-        uCameraPosition: { value: [0, 0, 0] },
+        uCameraPosition: { value: new THREE.Vector3(0, 0, 0) },
         uCameraNear: { value: 0.1 },
         uCameraFar: { value: 1000.0 },
         uProjectionMatrixInverse: { value: null },
         uViewMatrixInverse: { value: null },
-    },
-
-    vertexShader: atmosphereVertexShader,
-    fragmentShader: atmosphereFragmentShader,
-};
+    };
+}
 
 // =============================================================================
 // DUST PARTICLES (VOLUMETRIC)
@@ -512,11 +521,11 @@ export const dustParticlesFragmentShader = /* glsl */ `
         ));
         
         float dustAccum = 0.0;
-        const int STEPS = 16;
+        #define MAX_DUST_STEPS 16
         float stepSize = 2.0;
         
         vec3 pos = rayOrigin;
-        for (int i = 0; i < STEPS; i++) {
+        for (int i = 0; i < MAX_DUST_STEPS; i++) {
             pos += rayDir * stepSize;
             
             // Animate dust floating
@@ -537,35 +546,37 @@ export const dustParticlesFragmentShader = /* glsl */ `
 `;
 
 export const dustParticlesShader = {
-    uniforms: {
+    vertexShader: dustParticlesVertexShader,
+    fragmentShader: dustParticlesFragmentShader,
+};
+
+export function createDustParticlesUniforms(): DustParticlesUniforms {
+    return {
         tDiffuse: { value: null },
         uTime: { value: 0 },
         uDensity: { value: 0.02 },
         uParticleSize: { value: 0.01 },
-        uLightDirection: { value: [0.5, 0.8, 0.3] },
-        uCameraPosition: { value: [0, 0, 0] },
-        uResolution: { value: [1920, 1080] },
-    },
-
-    vertexShader: dustParticlesVertexShader,
-    fragmentShader: dustParticlesFragmentShader,
-};
+        uLightDirection: { value: new THREE.Vector3(0.5, 0.8, 0.3) },
+        uCameraPosition: { value: new THREE.Vector3(0, 0, 0) },
+        uResolution: { value: new THREE.Vector2(1920, 1080) },
+    };
+}
 
 export interface VolumetricFogUniforms extends IUniforms {
     tDepth: { value: THREE.Texture | null };
     tDiffuse: { value: THREE.Texture | null };
     uCameraNear: { value: number };
     uCameraFar: { value: number };
-    uFogColor: { value: THREE.Color | number[] };
+    uFogColor: { value: THREE.Color };
     uFogDensity: { value: number };
     uFogHeight: { value: number };
     uFogFalloff: { value: number };
     uTime: { value: number };
-    uLightDirection: { value: THREE.Vector3 | number[] };
-    uLightColor: { value: THREE.Color | number[] };
+    uLightDirection: { value: THREE.Vector3 };
+    uLightColor: { value: THREE.Color };
     uScatteringStrength: { value: number };
-    uResolution: { value: THREE.Vector2 | number[] };
-    uCameraPosition: { value: THREE.Vector3 | number[] };
+    uResolution: { value: THREE.Vector2 };
+    uCameraPosition: { value: THREE.Vector3 };
     uProjectionMatrixInverse: { value: THREE.Matrix4 | null };
     uViewMatrixInverse: { value: THREE.Matrix4 | null };
 }
@@ -574,12 +585,12 @@ export interface UnderwaterUniforms extends IUniforms {
     tDiffuse: { value: THREE.Texture | null };
     tDepth: { value: THREE.Texture | null };
     uTime: { value: number };
-    uWaterColor: { value: THREE.Color | number[] };
+    uWaterColor: { value: THREE.Color };
     uWaterDensity: { value: number };
     uCausticStrength: { value: number };
     uCausticScale: { value: number };
     uWaterSurface: { value: number };
-    uCameraPosition: { value: THREE.Vector3 | number[] };
+    uCameraPosition: { value: THREE.Vector3 };
     uCameraNear: { value: number };
     uCameraFar: { value: number };
     uProjectionMatrixInverse: { value: THREE.Matrix4 | null };
@@ -590,12 +601,12 @@ export interface AtmosphereUniforms extends IUniforms {
     tDiffuse: { value: THREE.Texture | null };
     tDepth: { value: THREE.Texture | null };
     uTime: { value: number };
-    uSunDirection: { value: THREE.Vector3 | number[] };
-    uSunColor: { value: THREE.Color | number[] };
-    uSkyColor: { value: THREE.Color | number[] };
+    uSunDirection: { value: THREE.Vector3 };
+    uSunColor: { value: THREE.Color };
+    uSkyColor: { value: THREE.Color };
     uRayleighCoeff: { value: number };
     uMieCoeff: { value: number };
-    uCameraPosition: { value: THREE.Vector3 | number[] };
+    uCameraPosition: { value: THREE.Vector3 };
     uCameraNear: { value: number };
     uCameraFar: { value: number };
     uProjectionMatrixInverse: { value: THREE.Matrix4 | null };
@@ -607,7 +618,7 @@ export interface DustParticlesUniforms extends IUniforms {
     uTime: { value: number };
     uDensity: { value: number };
     uParticleSize: { value: number };
-    uLightDirection: { value: THREE.Vector3 | number[] };
-    uCameraPosition: { value: THREE.Vector3 | number[] };
-    uResolution: { value: THREE.Vector2 | number[] };
+    uLightDirection: { value: THREE.Vector3 };
+    uCameraPosition: { value: THREE.Vector3 };
+    uResolution: { value: THREE.Vector2 };
 }

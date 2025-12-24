@@ -5,7 +5,7 @@
  */
 
 import type * as THREE from 'three';
-import type { IUniforms } from './types';
+import type { IUniforms } from './types.js';
 
 export const instancingWindVertexShader = /* glsl */ `
   attribute vec3 position;
@@ -58,15 +58,6 @@ export const instancingWindVertexShader = /* glsl */ `
   // Quaternion operations
   vec3 quatRotate(vec4 q, vec3 v) {
       return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
-  }
-  
-  vec4 quatMul(vec4 q1, vec4 q2) {
-      return vec4(
-          q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
-          q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
-          q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w,
-          q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z
-      );
   }
   
   void main() {

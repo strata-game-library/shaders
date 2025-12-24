@@ -1,11 +1,63 @@
 import * as THREE from 'three';
-import type { IUniforms } from './types';
+import type { IUniforms } from './types.js';
 
 /**
  * Terrain shader - PBR textured ground with triplanar mapping and biome-specific elevation
  *
  * Lifted from Otterfall procedural rendering system.
  */
+
+/**
+ * Common biome GLSL functions
+ */
+const BIOME_GLSL = /* glsl */ `
+  int getBiomeType(vec2 pos, vec2 biomeCenters[7], int biomeTypes[7]) {
+    int closestIdx = 0;
+    float closestDist = distance(pos, biomeCenters[0]);
+    
+    for (int i = 1; i < 7; i++) {
+      float dist = distance(pos, biomeCenters[i]);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIdx = i;
+      }
+    }
+    
+    return biomeTypes[closestIdx];
+  }
+
+  vec3 getBiomeColor(vec2 pos, vec2 biomeCenters[7], float biomeRadii[7], vec3 biomeColors[7]) {
+    // Find closest biome
+    int closestIdx = 0;
+    float closestDist = distance(pos, biomeCenters[0]);
+    
+    for (int i = 1; i < 7; i++) {
+      float dist = distance(pos, biomeCenters[i]);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIdx = i;
+      }
+    }
+    
+    vec3 baseColor = biomeColors[closestIdx];
+    
+    // Blend with adjacent biomes at boundaries
+    vec3 blendedColor = baseColor;
+    float totalWeight = 1.0;
+    
+    for (int i = 0; i < 7; i++) {
+      if (i != closestIdx) {
+        float dist = distance(pos, biomeCenters[i]);
+        float blendRadius = biomeRadii[i] * 0.3; // 30% blend zone
+        float weight = smoothstep(blendRadius, 0.0, dist - biomeRadii[i]);
+        blendedColor += biomeColors[i] * weight;
+        totalWeight += weight;
+      }
+    }
+    
+    return blendedColor / totalWeight;
+  }
+`;
 
 export const terrainVertexShader = /* glsl */ `
   uniform vec2 biomeCenters[7];
@@ -33,20 +85,7 @@ export const terrainVertexShader = /* glsl */ `
                mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
   }
   
-  int getBiomeType(vec2 pos) {
-    int closestIdx = 0;
-    float closestDist = distance(pos, biomeCenters[0]);
-    
-    for (int i = 1; i < 7; i++) {
-      float dist = distance(pos, biomeCenters[i]);
-      if (dist < closestDist) {
-        closestDist = dist;
-        closestIdx = i;
-      }
-    }
-    
-    return biomeTypes[closestIdx];
-  }
+  ${BIOME_GLSL}
   
   void main() {
     vUv = uv;
@@ -56,7 +95,7 @@ export const terrainVertexShader = /* glsl */ `
     vec2 worldXZ = worldPos.xz;
     
     // Calculate elevation based on biome
-    int biomeType = getBiomeType(worldXZ);
+    int biomeType = getBiomeType(worldXZ, biomeCenters, biomeTypes);
     float elevation = 0.0;
     
     // Mountain biome: elevated terrain with slopes up to 45 degrees
@@ -84,8 +123,10 @@ export const terrainVertexShader = /* glsl */ `
     // Calculate approximate normal for triplanar mapping
     float dx = noise(worldXZ + vec2(0.1, 0.0)) - noise(worldXZ - vec2(0.1, 0.0));
     float dz = noise(worldXZ + vec2(0.0, 0.1)) - noise(worldXZ - vec2(0.0, 0.1));
-    vec3 tangentX = normalize(vec3(1.0, dx * 10.0, 0.0));
-    vec3 tangentZ = normalize(vec3(0.0, dz * 10.0, 1.0));
+    float dy_dx = dx * 10.0;
+    float dy_dz = dz * 10.0;
+    vec3 tangentX = normalize(vec3(1.0, dy_dx, 0.0));
+    vec3 tangentZ = normalize(vec3(0.0, dy_dz, 1.0));
     vNormal = normalize(cross(tangentZ, tangentX));
     
     // Calculate slope for walkability
@@ -222,56 +263,11 @@ export const terrainFragmentShader = /* glsl */ `
     return detailX * blendWeights.x + detailY * blendWeights.y + detailZ * blendWeights.z;
   }
   
-  int getBiomeType(vec2 pos) {
-    int closestIdx = 0;
-    float closestDist = distance(pos, biomeCenters[0]);
-    
-    for (int i = 1; i < 7; i++) {
-      float dist = distance(pos, biomeCenters[i]);
-      if (dist < closestDist) {
-        closestDist = dist;
-        closestIdx = i;
-      }
-    }
-    
-    return biomeTypes[closestIdx];
-  }
-  
-  vec3 getBiomeColor(vec2 pos) {
-    // Find closest biome
-    int closestIdx = 0;
-    float closestDist = distance(pos, biomeCenters[0]);
-    
-    for (int i = 1; i < 7; i++) {
-      float dist = distance(pos, biomeCenters[i]);
-      if (dist < closestDist) {
-        closestDist = dist;
-        closestIdx = i;
-      }
-    }
-    
-    vec3 baseColor = biomeColors[closestIdx];
-    
-    // Blend with adjacent biomes at boundaries
-    vec3 blendedColor = baseColor;
-    float totalWeight = 1.0;
-    
-    for (int i = 0; i < 7; i++) {
-      if (i != closestIdx) {
-        float dist = distance(pos, biomeCenters[i]);
-        float blendRadius = biomeRadii[i] * 0.3; // 30% blend zone
-        float weight = smoothstep(blendRadius, 0.0, dist - biomeRadii[i]);
-        blendedColor += biomeColors[i] * weight;
-        totalWeight += weight;
-      }
-    }
-    
-    return blendedColor / totalWeight;
-  }
+  ${BIOME_GLSL}
   
   void main() {
     vec2 worldXZ = vWorldPos.xz;
-    int biomeType = getBiomeType(worldXZ);
+    int biomeType = getBiomeType(worldXZ, biomeCenters, biomeTypes);
     
     vec3 finalColor;
     
@@ -309,7 +305,7 @@ export const terrainFragmentShader = /* glsl */ `
       }
     } else {
       // Fallback to procedural rendering
-      vec3 baseColor = getBiomeColor(worldXZ);
+      vec3 baseColor = getBiomeColor(worldXZ, biomeCenters, biomeRadii, biomeColors);
       float detail = triplanarDetail(vWorldPos);
       
       // Tundra: Add snow shader effect

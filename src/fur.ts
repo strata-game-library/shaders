@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { IUniforms } from './types';
+import type { IUniforms } from './types.js';
 
 /**
  * Fur shell shader - layered alpha-tested shells for volumetric fur effect
@@ -97,13 +97,18 @@ export interface FurUniforms extends IUniforms {
 /**
  * Fur shader uniforms factory
  */
-export function createFurUniforms(layerOffset = 0): FurUniforms {
+export function createFurUniforms(options: {
+    layerOffset?: number;
+    spacing?: number;
+    colorBase?: [number, number, number];
+    colorTip?: [number, number, number];
+} = {}): FurUniforms {
     return {
-        layerOffset: { value: layerOffset },
-        spacing: { value: 0.02 },
+        layerOffset: { value: options.layerOffset ?? 0 },
+        spacing: { value: options.spacing ?? defaultFurConfig.spacing },
         time: { value: 0 },
-        colorBase: { value: new THREE.Color(0.3, 0.2, 0.1) },
-        colorTip: { value: new THREE.Color(0.6, 0.5, 0.3) },
+        colorBase: { value: new THREE.Color(...(options.colorBase ?? defaultFurConfig.colorBase)) },
+        colorTip: { value: new THREE.Color(...(options.colorTip ?? defaultFurConfig.colorTip)) },
     };
 }
 

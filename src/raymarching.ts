@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { IUniforms } from './types';
+import type { IUniforms } from './types.js';
 
 /**
  * Ray marching shader - GPU-based SDF rendering

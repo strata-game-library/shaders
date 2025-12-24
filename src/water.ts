@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { IUniforms } from './types';
+import type { IUniforms } from './types.js';
 
 /**
  * Water shader - animated rippling water surface with procedural normal mapping
@@ -201,7 +201,7 @@ export const advancedWaterVertexShader = /* glsl */ `
     
     pos.y += wave1 + wave2 + wave3 + noiseValue * 0.1;
     
-    vElevation = pos.z;
+    vElevation = pos.y;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
   }
 `;

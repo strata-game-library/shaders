@@ -5,7 +5,7 @@
  */
 
 import type * as THREE from 'three';
-import type { IUniforms } from './types';
+import type { IUniforms } from './types.js';
 
 export const volumetricFogMeshVertexShader = /* glsl */ `
   varying vec3 vWorldPosition;
@@ -133,15 +133,15 @@ export const underwaterOverlayFragmentShader = /* glsl */ `
 
 export interface VolumetricFogMeshUniforms extends IUniforms {
     uTime: { value: number };
-    uFogColor: { value: number[] };
+    uFogColor: { value: THREE.Color };
     uFogDensity: { value: number };
     uFogHeight: { value: number };
-    uCameraPosition: { value: number[] };
+    uCameraPosition: { value: THREE.Vector3 };
 }
 
 export interface UnderwaterOverlayUniforms extends IUniforms {
     uTime: { value: number };
-    uWaterColor: { value: number[] };
+    uWaterColor: { value: THREE.Color };
     uDensity: { value: number };
     uCausticStrength: { value: number };
     uWaterSurface: { value: number };
@@ -156,10 +156,10 @@ export function createVolumetricFogMeshUniforms(
 ): VolumetricFogMeshUniforms {
     return {
         uTime: { value: 0 },
-        uFogColor: { value: color.toArray() },
+        uFogColor: { value: color.clone() },
         uFogDensity: { value: density },
         uFogHeight: { value: height },
-        uCameraPosition: { value: cameraPosition.toArray() },
+        uCameraPosition: { value: cameraPosition.clone() },
     };
 }
 
@@ -172,7 +172,7 @@ export function createUnderwaterOverlayUniforms(
 ): UnderwaterOverlayUniforms {
     return {
         uTime: { value: 0 },
-        uWaterColor: { value: waterColor.toArray() },
+        uWaterColor: { value: waterColor.clone() },
         uDensity: { value: density },
         uCausticStrength: { value: causticStrength },
         uWaterSurface: { value: waterSurface },
