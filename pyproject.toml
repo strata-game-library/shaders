@@ -1,0 +1,15 @@
+[project]
+name = "strata-shaders-docs"
+version = "1.0.0"
+description = "Documentation for Strata Shaders"
+dependencies = []
+
+[project.optional-dependencies]
+docs = [
+    "sphinx>=7.0.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "myst-parser>=2.0.0",
+]
+
+[tool.uv]
+managed = true
