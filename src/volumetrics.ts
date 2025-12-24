@@ -275,6 +275,9 @@ export const underwaterFragmentShader = /* glsl */ `
     vec3 getWorldPosition(vec2 uv, float depth) {
         vec4 clipSpace = vec4(uv * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
         vec4 viewSpace = uProjectionMatrixInverse * clipSpace;
+        if (abs(viewSpace.w) < 0.0001) {
+            return vec3(0.0);
+        }
         viewSpace /= viewSpace.w;
         vec4 worldSpace = uViewMatrixInverse * viewSpace;
         return worldSpace.xyz;
