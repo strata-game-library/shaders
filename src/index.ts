@@ -10,33 +10,37 @@
  * @module strata-shaders
  */
 
+// Common types and chunks
+export * from './types.js';
+export * from './chunks.js';
+
 // Cloud shaders
-export * from './clouds';
+export * from './clouds.js';
 
 // Fur/shell shaders
-export * from './fur';
+export * from './fur.js';
 
 // God rays and volumetric lighting
-export * from './godRays';
+export * from './godRays.js';
 
 // Wind animation for instanced vegetation
-export * from './instancing-wind';
+export * from './instancing-wind.js';
 
 // Material shaders (toon, hologram, dissolve, etc.)
-export * from './materials';
+export * from './materials/index.js';
 
 // Raymarching SDF shaders
-export * from './raymarching';
+export * from './raymarching.js';
 
 // Procedural sky and atmosphere
-export * from './sky';
+export * from './sky.js';
 
 // Terrain rendering shaders
-export * from './terrain';
+export * from './terrain.js';
 
 // Volumetric fog and underwater effects
-export * from './volumetrics';
-export * from './volumetrics-components';
+export * from './volumetrics.js';
+export * from './volumetrics-components.js';
 
 // Water surface shaders
-export * from './water';
+export * from './water.js';

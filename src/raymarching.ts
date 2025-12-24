@@ -1,3 +1,6 @@
+import * as THREE from 'three';
+import type { IUniforms } from './types.js';
+
 /**
  * Ray marching shader - GPU-based SDF rendering
  *
@@ -116,3 +119,34 @@ export const raymarchingFragmentShader = /* glsl */ `
     gl_FragColor = clamp(color, 0.0, 1.0);
   }
 `;
+
+export interface RaymarchingUniforms extends IUniforms {
+    uCameraPosition: { value: THREE.Vector3 };
+    uCameraMatrix: { value: THREE.Matrix4 };
+    uResolution: { value: THREE.Vector2 };
+    uTime: { value: number };
+    uMaxSteps: { value: number };
+    uMaxDistance: { value: number };
+    uMinDistance: { value: number };
+    uBackgroundColor: { value: THREE.Color };
+    uFogStrength: { value: number };
+    uFogColor: { value: THREE.Color };
+}
+
+export function createRaymarchingUniforms(
+    camera: THREE.Camera,
+    resolution: THREE.Vector2
+): RaymarchingUniforms {
+    return {
+        uCameraPosition: { value: camera.position },
+        uCameraMatrix: { value: camera.matrixWorld },
+        uResolution: { value: resolution },
+        uTime: { value: 0 },
+        uMaxSteps: { value: 64 },
+        uMaxDistance: { value: 100 },
+        uMinDistance: { value: 0.001 },
+        uBackgroundColor: { value: new THREE.Color(0, 0, 0) },
+        uFogStrength: { value: 0.05 },
+        uFogColor: { value: new THREE.Color(0, 0, 0) },
+    };
+}

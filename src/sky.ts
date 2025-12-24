@@ -4,8 +4,6 @@
  * Day/night cycle, stars, weather effects
  */
 
-import * as THREE from 'three';
-
 export const skyVertexShader = /* glsl */ `
   varying vec2 vUv;
   varying vec3 vPosition;
@@ -98,6 +96,8 @@ export const skyFragmentShader = /* glsl */ `
       gl_FragColor = vec4(skyColor, 1.0);
   }
 `;
+
+import * as THREE from 'three';
 
 export interface SkyUniforms {
     [uniform: string]: THREE.IUniform;

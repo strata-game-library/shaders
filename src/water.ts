@@ -1,3 +1,6 @@
+import * as THREE from 'three';
+import type { IUniforms } from './types.js';
+
 /**
  * Water shader - animated rippling water surface with procedural normal mapping
  *
@@ -198,7 +201,7 @@ export const advancedWaterVertexShader = /* glsl */ `
     
     pos.y += wave1 + wave2 + wave3 + noiseValue * 0.1;
     
-    vElevation = pos.z;
+    vElevation = pos.y;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
   }
 `;
@@ -261,24 +264,36 @@ export const advancedWaterFragmentShader = /* glsl */ `
   }
 `;
 
+export interface WaterUniforms extends IUniforms {
+    time: { value: number };
+}
+
 /**
  * Water shader uniforms factory
  */
-export function createWaterUniforms() {
+export function createWaterUniforms(): WaterUniforms {
     return {
         time: { value: 0 },
     };
 }
 
+export interface AdvancedWaterUniforms extends IUniforms {
+    uTime: { value: number };
+    uWaterColor: { value: THREE.Color | number[] };
+    uDeepWaterColor: { value: THREE.Color | number[] };
+    uFoamColor: { value: THREE.Color | number[] };
+    uCausticIntensity: { value: number };
+}
+
 /**
  * Advanced water uniforms factory
  */
-export function createAdvancedWaterUniforms() {
+export function createAdvancedWaterUniforms(): AdvancedWaterUniforms {
     return {
         uTime: { value: 0 },
-        uWaterColor: { value: [0.165, 0.353, 0.541] },
-        uDeepWaterColor: { value: [0.102, 0.227, 0.353] },
-        uFoamColor: { value: [0.541, 0.706, 0.831] },
+        uWaterColor: { value: new THREE.Color(0.165, 0.353, 0.541) },
+        uDeepWaterColor: { value: new THREE.Color(0.102, 0.227, 0.353) },
+        uFoamColor: { value: new THREE.Color(0.541, 0.706, 0.831) },
         uCausticIntensity: { value: 0.4 },
     };
 }

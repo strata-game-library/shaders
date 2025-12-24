@@ -86,7 +86,8 @@ export const godRaysFragmentShader = /* glsl */ `
       float illuminationDecay = 1.0;
       vec3 color = vec3(0.0);
       
-      for (int i = 0; i < 100; i++) {
+      #define MAX_SAMPLES 100
+      for (int i = 0; i < MAX_SAMPLES; i++) {
           if (i >= samples) break;
           
           texCoord -= deltaTexCoord;

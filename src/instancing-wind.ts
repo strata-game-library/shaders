@@ -4,6 +4,9 @@
  * Vertex shader for drei's Instances with wind and LOD support
  */
 
+import type * as THREE from 'three';
+import type { IUniforms } from './types.js';
+
 export const instancingWindVertexShader = /* glsl */ `
   attribute vec3 position;
   attribute vec3 normal;
@@ -57,15 +60,6 @@ export const instancingWindVertexShader = /* glsl */ `
       return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
   }
   
-  vec4 quatMul(vec4 q1, vec4 q2) {
-      return vec4(
-          q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
-          q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
-          q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w,
-          q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z
-      );
-  }
-  
   void main() {
       vec3 localPos = position;
       vec3 localNormal = normal;
@@ -113,3 +107,25 @@ export const instancingWindVertexShader = /* glsl */ `
       gl_Position = projectionMatrix * modelViewMatrix * vec4(localPos, 1.0);
   }
 `;
+
+export interface InstancingWindUniforms extends IUniforms {
+    uTime: { value: number };
+    uCameraPosition: { value: THREE.Vector3 };
+    uWindStrength: { value: number };
+    uLodDistance: { value: number };
+    uEnableWind: { value: boolean };
+}
+
+export function createInstancingWindUniforms(
+    cameraPosition: THREE.Vector3,
+    lodDistance = 100
+): InstancingWindUniforms {
+    return {
+        uTime: { value: 0 },
+        uCameraPosition: { value: cameraPosition },
+        uWindStrength: { value: 1.0 },
+        uLodDistance: { value: lodDistance },
+        uEnableWind: { value: true },
+    };
+}
+

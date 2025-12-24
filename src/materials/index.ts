@@ -9,7 +9,7 @@ import * as THREE from 'three';
  * Inline shader chunks to avoid external dependency
  * These provide reusable GLSL snippets for common operations
  */
-const ShaderChunks = {
+export const ShaderChunks = {
     noise: {
         rand: /* glsl */ `
 float rand(vec2 co) {
@@ -77,7 +77,7 @@ vec3 gradient3(vec3 color1, vec3 color2, vec3 color3, float t) {
 };
 
 // Simple noise function for dissolve effect
-const noiseSnippet = /* glsl */ `
+export const noiseSnippet = /* glsl */ `
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
@@ -578,7 +578,6 @@ void main() {
 
 export interface CrystalMaterialOptions {
     color?: THREE.ColorRepresentation;
-    refractionRatio?: number;
     fresnelPower?: number;
     rainbowIntensity?: number;
     envMapIntensity?: number;
@@ -587,7 +586,6 @@ export interface CrystalMaterialOptions {
 export function createCrystalMaterial(options: CrystalMaterialOptions = {}): THREE.ShaderMaterial {
     const {
         color = 0xffffff,
-        refractionRatio = 0.98,
         fresnelPower = 4.0,
         rainbowIntensity = 0.3,
         envMapIntensity = 1.0,
@@ -597,7 +595,6 @@ export function createCrystalMaterial(options: CrystalMaterialOptions = {}): THR
         uniforms: {
             uTime: { value: 0 },
             uColor: { value: new THREE.Color(color) },
-            uRefractionRatio: { value: refractionRatio },
             uFresnelPower: { value: fresnelPower },
             uRainbowIntensity: { value: rainbowIntensity },
             uEnvMapIntensity: { value: envMapIntensity },
@@ -605,33 +602,24 @@ export function createCrystalMaterial(options: CrystalMaterialOptions = {}): THR
         vertexShader: /* glsl */ `
 varying vec3 vNormal;
 varying vec3 vViewDir;
-varying vec3 vReflect;
-varying vec3 vRefract;
 varying vec3 vWorldPos;
-
-uniform float uRefractionRatio;
 
 void main() {
     vNormal = normalize(normalMatrix * normal);
     vec4 worldPos = modelMatrix * vec4(position, 1.0);
     vWorldPos = worldPos.xyz;
     vViewDir = normalize(cameraPosition - worldPos.xyz);
-    vReflect = reflect(-vViewDir, vNormal);
-    vRefract = refract(-vViewDir, vNormal, uRefractionRatio);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }`,
         fragmentShader: /* glsl */ `
 uniform float uTime;
 uniform vec3 uColor;
-uniform float uRefractionRatio;
 uniform float uFresnelPower;
 uniform float uRainbowIntensity;
 uniform float uEnvMapIntensity;
 
 varying vec3 vNormal;
 varying vec3 vViewDir;
-varying vec3 vReflect;
-varying vec3 vRefract;
 varying vec3 vWorldPos;
 
 ${ShaderChunks.lighting.fresnel}
