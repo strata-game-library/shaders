@@ -5,6 +5,8 @@
  * Lifted from Otterfall procedural rendering system.
  */
 
+import * as THREE from 'three';
+
 export const furVertexShader = /* glsl */ `
   uniform float layerOffset;
   uniform float spacing;
@@ -86,7 +88,7 @@ export const furFragmentShader = /* glsl */ `
 /**
  * Fur shader uniforms factory
  */
-export function createFurUniforms(layerOffset: number = 0) {
+export function createFurUniforms(layerOffset = 0) {
     return {
         layerOffset: { value: layerOffset },
         spacing: { value: 0.02 },
