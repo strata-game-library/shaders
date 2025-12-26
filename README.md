@@ -3,11 +3,17 @@
 [![npm version](https://img.shields.io/npm/v/@strata/shaders.svg)](https://www.npmjs.com/package/@strata/shaders)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+GLSL shader collection for [Strata 3D](https://strata.game) - terrain, water, clouds, volumetric effects, and more.
+
+## 📚 Documentation
+
+**Full documentation is available at [strata.game/shaders](https://strata.game/shaders/)**
+
+---
+
 ## 🏢 Enterprise Context
 
 **Strata** is the Games & Procedural division of the [jbcom enterprise](https://jbcom.github.io). This package is part of a coherent suite of specialized tools, sharing a unified design system and interconnected with sibling organizations like [Agentic](https://agentic.dev) and [Extended Data](https://extendeddata.dev).
-
-GLSL shader collection for [Strata 3D](https://strata.game) - terrain, water, clouds, volumetric effects, and more.
 
 ## Features
 
@@ -35,49 +41,27 @@ const material = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
     uWaterColor: { value: new THREE.Color(0x0077be) },
-    // ... other uniforms
   }
 });
 ```
 
 ## Available Shaders
 
-### Terrain
-- `terrainVertexShader` / `terrainFragmentShader` - Height-based terrain blending
-
-### Water
-- `waterVertexShader` / `waterFragmentShader` - Animated water surface
-- `advancedWaterVertexShader` / `advancedWaterFragmentShader` - Reflections & refractions
-
-### Sky & Atmosphere
-- `skyVertexShader` / `skyFragmentShader` - Procedural sky with sun
-- `atmosphereVertexShader` / `atmosphereFragmentShader` - Atmospheric scattering
-
-### Clouds
-- `cloudLayerVertexShader` / `cloudLayerFragmentShader` - 2D cloud layers
-- `volumetricCloudVertexShader` / `volumetricCloudFragmentShader` - 3D volumetric clouds
-
-### Volumetric Effects
-- `volumetricFogShader` - Distance-based fog
-- `underwaterShader` - Underwater overlay with caustics
-- `godRaysVertexShader` / `godRaysFragmentShader` - Volumetric light shafts
-
-### Materials
-- `toonVertexShader` / `toonFragmentShader` - Cel-shading
-- `hologramVertexShader` / `hologramFragmentShader` - Holographic effect
-- `dissolveVertexShader` / `dissolveFragmentShader` - Dissolve transition
-- `forcefieldVertexShader` / `forcefieldFragmentShader` - Energy shield
-- `glitchVertexShader` / `glitchFragmentShader` - Digital glitch effect
-
-### Vegetation
-- `grassWindVertexShader` - Wind animation for grass instances
-- `treeWindVertexShader` - Wind animation for tree instances
+| Category | Shaders |
+|----------|---------|
+| Terrain | `terrainVertexShader`, `terrainFragmentShader` |
+| Water | `waterVertexShader`, `waterFragmentShader`, `advancedWaterVertexShader`, `advancedWaterFragmentShader` |
+| Sky | `skyVertexShader`, `skyFragmentShader`, `atmosphereVertexShader`, `atmosphereFragmentShader` |
+| Clouds | `cloudLayerVertexShader`, `cloudLayerFragmentShader`, `volumetricCloudVertexShader`, `volumetricCloudFragmentShader` |
+| Volumetrics | `volumetricFogShader`, `underwaterShader`, `godRaysVertexShader`, `godRaysFragmentShader` |
+| Materials | `toonShader`, `hologramShader`, `dissolveShader`, `forcefieldShader`, `glitchShader` |
+| Vegetation | `grassWindVertexShader`, `treeWindVertexShader` |
 
 ## Related
 
-- [Strata 3D](https://strata.game) - Full procedural graphics library
+- [Strata Documentation](https://strata.game) - Full documentation
+- [Strata Core](https://github.com/strata-game-library/core) - Main library
 - [Strata Presets](https://github.com/strata-game-library/presets) - Pre-configured settings
-- [Strata Examples](https://github.com/strata-game-library/examples) - Example applications
 
 ## License
 
