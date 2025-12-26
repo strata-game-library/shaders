@@ -1,5 +1,5 @@
 {
-  "name": "@strata/shaders",
+  "name": "@strata-game-library/shaders",
   "version": "1.0.0",
   "description": "GLSL shader collection for Strata 3D - terrain, water, clouds, volumetric effects",
   "main": "dist/index.js",
