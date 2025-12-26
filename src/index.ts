@@ -1,5 +1,5 @@
 /**
- * @jbcom/strata-shaders
+ * @strata/shaders
  *
  * GLSL shader collection for Strata 3D.
  * Provides terrain, water, clouds, volumetric effects, and more.

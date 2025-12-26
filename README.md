@@ -1,4 +1,4 @@
-# @jbcom/strata-shaders
+# @strata/shaders
 
 GLSL shader collection for [Strata 3D](https://github.com/jbcom/nodejs-strata) - terrain, water, clouds, volumetric effects, and more.
 
@@ -11,15 +11,15 @@ GLSL shader collection for [Strata 3D](https://github.com/jbcom/nodejs-strata) -
 ## Installation
 
 ```bash
-npm install @jbcom/strata-shaders
+npm install @strata/shaders
 # or
-pnpm add @jbcom/strata-shaders
+pnpm add @strata/shaders
 ```
 
 ## Usage
 
 ```typescript
-import { waterVertexShader, waterFragmentShader } from '@jbcom/strata-shaders';
+import { waterVertexShader, waterFragmentShader } from '@strata/shaders';
 import * as THREE from 'three';
 
 const material = new THREE.ShaderMaterial({
