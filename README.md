@@ -1,6 +1,13 @@
 # @strata/shaders
 
-GLSL shader collection for [Strata 3D](https://github.com/jbcom/nodejs-strata) - terrain, water, clouds, volumetric effects, and more.
+[![npm version](https://img.shields.io/npm/v/@strata/shaders.svg)](https://www.npmjs.com/package/@strata/shaders)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## 🏢 Enterprise Context
+
+**Strata** is the Games & Procedural division of the [jbcom enterprise](https://jbcom.github.io). This package is part of a coherent suite of specialized tools, sharing a unified design system and interconnected with sibling organizations like [Agentic](https://agentic.dev) and [Extended Data](https://extendeddata.dev).
+
+GLSL shader collection for [Strata 3D](https://strata.game) - terrain, water, clouds, volumetric effects, and more.
 
 ## Features
 
@@ -68,9 +75,9 @@ const material = new THREE.ShaderMaterial({
 
 ## Related
 
-- [Strata 3D](https://github.com/jbcom/nodejs-strata) - Full procedural graphics library
-- [Strata Presets](https://github.com/jbcom/nodejs-strata-presets) - Pre-configured settings
-- [Strata Examples](https://github.com/jbcom/nodejs-strata-examples) - Example applications
+- [Strata 3D](https://strata.game) - Full procedural graphics library
+- [Strata Presets](https://github.com/strata-game-library/presets) - Pre-configured settings
+- [Strata Examples](https://github.com/strata-game-library/examples) - Example applications
 
 ## License
 
