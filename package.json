@@ -1,5 +1,5 @@
 {
-  "name": "@jbcom/strata-shaders",
+  "name": "@strata/shaders",
   "version": "1.0.0",
   "description": "GLSL shader collection for Strata 3D - terrain, water, clouds, volumetric effects",
   "main": "dist/index.js",
@@ -94,12 +94,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jbcom/nodejs-strata-shaders.git"
+    "url": "git+https://github.com/strata-game-library/shaders.git"
   },
   "bugs": {
-    "url": "https://github.com/jbcom/nodejs-strata-shaders/issues"
+    "url": "https://github.com/strata-game-library/shaders/issues"
   },
-  "homepage": "https://github.com/jbcom/nodejs-strata-shaders#readme",
+  "homepage": "https://github.com/strata-game-library/shaders#readme",
   "devDependencies": {
     "@biomejs/biome": "^2.3.10",
     "@types/three": "^0.182.0",
