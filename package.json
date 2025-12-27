@@ -102,7 +102,10 @@
   "homepage": "https://github.com/strata-game-library/shaders#readme",
   "devDependencies": {
     "@biomejs/biome": "^2.3.10",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/three": "^0.182.0",
+    "semantic-release": "^25.0.2",
     "three": "^0.182.0",
     "typescript": "^5.9.3"
   },
