@@ -100,6 +100,9 @@
     "url": "https://github.com/strata-game-library/shaders/issues"
   },
   "homepage": "https://github.com/strata-game-library/shaders#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.3.10",
     "@semantic-release/changelog": "^6.0.3",
