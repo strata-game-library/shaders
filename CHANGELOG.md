@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/strata-game-library/shaders/compare/v1.0.1...v1.0.2) (2025-12-27)
+
+
+### Bug Fixes
+
+* **cd:** use CI_GITHUB_TOKEN for semantic-release ([#16](https://github.com/strata-game-library/shaders/issues/16)) ([8591ba3](https://github.com/strata-game-library/shaders/commit/8591ba354f36f7ee5ca87f3f6bb200a1128d7106))
+* **cd:** use GITHUB_TOKEN for semantic-release ([#15](https://github.com/strata-game-library/shaders/issues/15)) ([ff015f4](https://github.com/strata-game-library/shaders/commit/ff015f4d8450455f102f648acb90d7a33ef47ebd))
+
 ## [1.0.1](https://github.com/strata-game-library/shaders/compare/v1.0.0...v1.0.1) (2025-12-27)
 
 
