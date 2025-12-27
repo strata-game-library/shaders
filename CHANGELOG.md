@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/strata-game-library/shaders/compare/v1.0.0...v1.0.1) (2025-12-27)
+
+
+### Bug Fixes
+
+* add publishConfig for public npm access ([#14](https://github.com/strata-game-library/shaders/issues/14)) ([58f9912](https://github.com/strata-game-library/shaders/commit/58f9912c68ca39260b6634dd83b31a54d4509a98))
+
 # 1.0.0 (2025-12-27)
 
 
