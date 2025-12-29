@@ -69,7 +69,8 @@
     "src"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint src/",
     "lint:fix": "biome lint --write src/",
@@ -108,8 +109,10 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/three": "^0.182.0",
+    "glob": "^13.0.0",
     "semantic-release": "^25.0.2",
     "three": "^0.182.0",
+    "tsup": "^8.5.0",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
