@@ -1,0 +1,11 @@
+{
+  "repos_scanned": 1,
+  "issues_triaged": 1,
+  "prs_processed": 1,
+  "jules_sessions_created": 0,
+  "cursor_agents_spawned": 0,
+  "ollama_resolutions": 0,
+  "merged_prs": 0,
+  "dry_run": false,
+  "errors": []
+}
