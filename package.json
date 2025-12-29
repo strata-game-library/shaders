@@ -109,6 +109,7 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/three": "^0.182.0",
+    "glob": "^13.0.0",
     "semantic-release": "^25.0.2",
     "three": "^0.182.0",
     "tsup": "^8.5.0",

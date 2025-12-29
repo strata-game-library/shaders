@@ -1,4 +1,6 @@
 import { defineConfig } from 'tsup';
+import { globSync } from 'glob';
+import path from 'path';
 
 /**
  * tsup configuration for @strata-game-library/shaders
@@ -7,22 +9,11 @@ import { defineConfig } from 'tsup';
  * Note: This package has minimal external dependencies (just three.js types)
  */
 export default defineConfig({
-	entry: {
-		index: 'src/index.ts',
-		types: 'src/types.ts',
-		chunks: 'src/chunks.ts',
-		clouds: 'src/clouds.ts',
-		fur: 'src/fur.ts',
-		godRays: 'src/godRays.ts',
-		'instancing-wind': 'src/instancing-wind.ts',
-		'materials/index': 'src/materials/index.ts',
-		raymarching: 'src/raymarching.ts',
-		sky: 'src/sky.ts',
-		terrain: 'src/terrain.ts',
-		volumetrics: 'src/volumetrics.ts',
-		'volumetrics-components': 'src/volumetrics-components.ts',
-		water: 'src/water.ts',
-	},
+	entry: globSync(['src/*.ts', 'src/materials/index.ts']).reduce<Record<string, string>>((acc, file) => {
+		const key = path.relative('src', file).replace(/\\/g, '/').replace('.ts', '');
+		acc[key] = file;
+		return acc;
+	}, {}),
 	format: ['esm'],
 	dts: true,
 	clean: true,
