@@ -1,68 +1,45 @@
-# @strata/shaders
+# Org-Specific Overrides
 
-[![npm version](https://img.shields.io/npm/v/@strata/shaders.svg)](https://www.npmjs.com/package/@strata/shaders)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Place files here to override enterprise defaults from jbcom/control-center.
 
-GLSL shader collection for [Strata 3D](https://strata.game) - terrain, water, clouds, volumetric effects, and more.
+## Directory Structure
 
-## 📚 Documentation
+```
+repository-files/
+├── always-sync/          # From enterprise (don't edit)
+├── initial-only/         # From enterprise (don't edit)  
+├── python/               # From enterprise (don't edit)
+├── nodejs/               # From enterprise (don't edit)
+├── go/                   # From enterprise (don't edit)
+├── rust/                 # From enterprise (don't edit)
+├── terraform/            # From enterprise (don't edit)
+└── org-overrides/        # YOUR ORG CUSTOMIZATIONS HERE
+    ├── .github/
+    │   └── workflows/    # Org-specific workflows
+    ├── .cursor/
+    │   └── rules/        # Org-specific Cursor rules
+    ├── CLAUDE.md         # Org-specific Claude instructions
+    └── AGENTS.md         # Org-specific agent instructions
+```
 
-**Full documentation is available at [strata.game/shaders](https://strata.game/shaders/)**
+## Merge Order
 
----
+When syncing to repos, files are applied in this order:
+1. Enterprise `always-sync/` (base)
+2. Language-specific rules (python/, nodejs/, etc.)
+3. **Org overrides** (this directory - wins on conflicts)
+4. `initial-only/` (only if file doesn't exist)
 
-## 🏢 Enterprise Context
+## Examples
 
-**Strata** is the Games & Procedural division of the [jbcom enterprise](https://jbcom.github.io). This package is part of a coherent suite of specialized tools, sharing a unified design system and interconnected with sibling organizations like [Agentic](https://agentic.dev) and [Extended Data](https://extendeddata.dev).
-
-## Features
-
-- **Standalone** - No Strata dependency required, works with any Three.js project
-- **Type-safe** - Full TypeScript definitions
-- **Comprehensive** - Terrain, water, sky, clouds, volumetrics, materials, and more
-
-## Installation
-
+### Override CI workflow for your org
 ```bash
-npm install @strata/shaders
-# or
-pnpm add @strata/shaders
+cp repository-files/always-sync/.github/workflows/ci.yml \
+   repository-files/org-overrides/.github/workflows/ci.yml
+# Then edit ci.yml with org-specific changes
 ```
 
-## Usage
-
-```typescript
-import { waterVertexShader, waterFragmentShader } from '@strata/shaders';
-import * as THREE from 'three';
-
-const material = new THREE.ShaderMaterial({
-  vertexShader: waterVertexShader,
-  fragmentShader: waterFragmentShader,
-  uniforms: {
-    uTime: { value: 0 },
-    uWaterColor: { value: new THREE.Color(0x0077be) },
-  }
-});
+### Add org-specific Cursor rule
+```bash
+echo "# My Org Rule" > repository-files/org-overrides/.cursor/rules/my-org.mdc
 ```
-
-## Available Shaders
-
-| Category | Shaders |
-|----------|---------|
-| Terrain | `terrainVertexShader`, `terrainFragmentShader` |
-| Water | `waterVertexShader`, `waterFragmentShader`, `advancedWaterVertexShader`, `advancedWaterFragmentShader` |
-| Sky | `skyVertexShader`, `skyFragmentShader`, `atmosphereVertexShader`, `atmosphereFragmentShader` |
-| Clouds | `cloudLayerVertexShader`, `cloudLayerFragmentShader`, `volumetricCloudVertexShader`, `volumetricCloudFragmentShader` |
-| Volumetrics | `volumetricFogShader`, `underwaterShader`, `godRaysVertexShader`, `godRaysFragmentShader` |
-| Materials | `toonShader`, `hologramShader`, `dissolveShader`, `forcefieldShader`, `glitchShader` |
-| Vegetation | `grassWindVertexShader`, `treeWindVertexShader` |
-
-## Related
-
-- [Strata Documentation](https://strata.game) - Full documentation
-- [Strata Core](https://github.com/strata-game-library/core) - Main library
-- [Strata Presets](https://github.com/strata-game-library/presets) - Pre-configured settings
-
-## License
-
-MIT © [Jon Bogaty](https://github.com/jbcom)
